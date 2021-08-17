@@ -1,8 +1,8 @@
 /**
- * GQTY AUTO-GENERATED CODE: PLEASE DO NOT MODIFY MANUALLY
+ * GQLESS AUTO-GENERATED CODE: PLEASE DO NOT MODIFY MANUALLY
  */
 
-import { SchemaUnionsKey } from "gqty";
+import { SchemaUnionsKey } from "gqless";
 
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -2931,6 +2931,18 @@ export interface DeleteUserInput {
   reassignId?: Maybe<Scalars["ID"]>;
 }
 
+/** Input for the generateAuthorizationCode mutation */
+export interface GenerateAuthorizationCodeInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** Email for WordPress user */
+  email?: Maybe<Scalars["String"]>;
+  /** Password for WordPress user */
+  password?: Maybe<Scalars["String"]>;
+  /** Username for WordPress user */
+  username?: Maybe<Scalars["String"]>;
+}
+
 /** Input for the registerUser mutation */
 export interface RegisterUserInput {
   /** User's AOL IM account. */
@@ -3255,7 +3267,7 @@ export interface UpdateUserInput {
   yim?: Maybe<Scalars["String"]>;
 }
 
-export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
+export const scalarsEnumsHash: import("gqless").ScalarsEnumsHash = {
   String: true,
   Int: true,
   Boolean: true,
@@ -3608,6 +3620,10 @@ export const generatedSchema = {
     deleteUser: {
       __type: "DeleteUserPayload",
       __args: { input: "DeleteUserInput!" },
+    },
+    generateAuthorizationCode: {
+      __type: "GenerateAuthorizationCodePayload",
+      __args: { input: "GenerateAuthorizationCodeInput!" },
     },
     increaseCount: { __type: "Int", __args: { count: "Int" } },
     registerUser: {
@@ -6799,6 +6815,18 @@ export const generatedSchema = {
     deletedId: { __type: "ID" },
     user: { __type: "User" },
   },
+  GenerateAuthorizationCodeInput: {
+    clientMutationId: { __type: "String" },
+    email: { __type: "String" },
+    password: { __type: "String" },
+    username: { __type: "String" },
+  },
+  GenerateAuthorizationCodePayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    code: { __type: "String" },
+    error: { __type: "String" },
+  },
   RegisterUserInput: {
     aim: { __type: "String" },
     clientMutationId: { __type: "String" },
@@ -7312,6 +7340,9 @@ export interface Mutation {
   }) => Maybe<DeletePostFormatPayload>;
   deleteTag: (args: { input: DeleteTagInput }) => Maybe<DeleteTagPayload>;
   deleteUser: (args: { input: DeleteUserInput }) => Maybe<DeleteUserPayload>;
+  generateAuthorizationCode: (args: {
+    input: GenerateAuthorizationCodeInput;
+  }) => Maybe<GenerateAuthorizationCodePayload>;
   increaseCount: (args?: {
     count?: Maybe<Scalars["Int"]>;
   }) => Maybe<ScalarsEnums["Int"]>;
@@ -13840,6 +13871,25 @@ export interface DeleteUserPayload {
 }
 
 /**
+ * The payload for the generateAuthorizationCode mutation
+ */
+export interface GenerateAuthorizationCodePayload {
+  __typename: "GenerateAuthorizationCodePayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Authorization code used for requesting refresh/access tokens
+   */
+  code?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Error encountered during user authentication, if any
+   */
+  error?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
  * The payload for the registerUser mutation
  */
 export interface RegisterUserPayload {
@@ -14316,6 +14366,7 @@ export interface SchemaObjectTypes {
   DeletePostFormatPayload: DeletePostFormatPayload;
   DeleteTagPayload: DeleteTagPayload;
   DeleteUserPayload: DeleteUserPayload;
+  GenerateAuthorizationCodePayload: GenerateAuthorizationCodePayload;
   RegisterUserPayload: RegisterUserPayload;
   ResetUserPasswordPayload: ResetUserPasswordPayload;
   RestoreCommentPayload: RestoreCommentPayload;
@@ -14535,6 +14586,7 @@ export type SchemaObjectTypesNames =
   | "DeletePostFormatPayload"
   | "DeleteTagPayload"
   | "DeleteUserPayload"
+  | "GenerateAuthorizationCodePayload"
   | "RegisterUserPayload"
   | "ResetUserPasswordPayload"
   | "RestoreCommentPayload"
