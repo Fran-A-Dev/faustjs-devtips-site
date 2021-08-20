@@ -1,8 +1,8 @@
 /**
- * GQLESS AUTO-GENERATED CODE: PLEASE DO NOT MODIFY MANUALLY
+ * GQTY AUTO-GENERATED CODE: PLEASE DO NOT MODIFY MANUALLY
  */
 
-import { SchemaUnionsKey } from "gqless";
+import { SchemaUnionsKey } from "gqty";
 
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -3267,7 +3267,7 @@ export interface UpdateUserInput {
   yim?: Maybe<Scalars["String"]>;
 }
 
-export const scalarsEnumsHash: import("gqless").ScalarsEnumsHash = {
+export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
   String: true,
   Int: true,
   Boolean: true,
