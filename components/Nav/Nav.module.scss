@@ -1,0 +1,46 @@
+.nav {
+  font-size: large;
+  color: var(--color);
+  padding: 1rem;
+  box-shadow: 1px 1px 5px 1px var(--shadow-color);
+  transition: box-shadow var(--transition-s) linear,
+    color var(--transition-s) linear;
+  a {
+    align-self: center;
+  }
+}
+
+.container {
+  margin: 0 auto;
+  display: flex;
+  max-width: var(--container-width);
+}
+
+.toggle {
+  display: inline;
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .logo {
+    display: none;
+  }
+  .container {
+    justify-content: space-between;
+  }
+}
+
+.posts {
+  padding: 0.5rem 1rem;
+  text-align: right;
+  flex: 1;
+}
+
+.logo {
+  flex: 2;
+}
+
+.emojilink {
+  margin-right: 10rem;
+  padding-bottom: 0.5rem 0rem;
+}
