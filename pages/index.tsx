@@ -11,8 +11,6 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <h1>Hello World</h1>
-
         {devTerms.map((devTerm, index) => (
           <Card key={index} devTerm={devTerm} />
         ))}
