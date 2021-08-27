@@ -14,10 +14,18 @@
   --border-color: invert(rgb(47, 51, 54));
 }
 
+body {
+  background-color: var(--bg-color);
+}
+
 .loader {
   color: rgb(41, 243, 0);
 
   font-family: monospace;
   font-size: xx-large;
   text-align: center;
+}
+
+a {
+  color: var(--color);
 }

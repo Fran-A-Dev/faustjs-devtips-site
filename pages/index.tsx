@@ -3,6 +3,8 @@ import { Devterm } from "../components/lib/types";
 import { client } from "../client";
 import Layout from "../components/lib/Layout";
 import Card from "../components/Card/Card";
+import { GetStaticPropsContext } from "next";
+import { getNextStaticProps } from "@faustjs/next";
 
 export default function Home() {
   const { useQuery } = client;
@@ -17,4 +19,11 @@ export default function Home() {
       </Layout>
     </>
   );
+}
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  return getNextStaticProps(context, {
+    Page: Home,
+    client,
+  });
 }

@@ -1,4 +1,5 @@
 import "../faust.config";
+import "normalize.css";
 import "../styles/globals.css";
 
 import type { AppProps /*, AppContext */ } from "next/app";
