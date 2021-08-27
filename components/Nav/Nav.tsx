@@ -8,9 +8,10 @@ const Nav = () => {
   return (
     <nav className={styles.nav}>
       <div className={styles.container}>
-        <Link href="/" passHref>
-          <span>Frans Dev Term Definer </span>
+        <Link href="/">
+          <a className={styles.Nav_link}>Fran&apos;s Modern Dev Terms</a>
         </Link>
+
         <div>
           <Link href="/termsubmit" passHref>
             <Emoji symbol="🚀 ⚛️ 🧗🏾‍♂️ 🤓" label="submit a term" size="2.1rem" />

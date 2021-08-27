@@ -23,7 +23,7 @@ function Card({ devTerm }: CardProps): JSX.Element {
 
       <div className="term">
         <Link href={`/details/${id}`}>
-          <a href={`/details/${id}`}>
+          <a className={styles.Nav_link} href={`/details/${id}`}>
             <span className={styles.term}>{term}</span>
           </a>
         </Link>

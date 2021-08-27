@@ -1,15 +1,18 @@
 import { GetStaticPropsContext } from "next";
 import { getNextStaticProps } from "@faustjs/next";
 import { client } from "../../client";
+import Layout from "../../components/lib/Layout";
 export function PostSingle() {
   const { usePost } = client;
   const post = usePost();
 
   return (
-    <>
-      <h1>{post?.title()}</h1>
-      <div dangerouslySetInnerHTML={{ __html: post?.content() }} />
-    </>
+    <Layout>
+      <>
+        <h1>{post?.title()}</h1>
+        <div dangerouslySetInnerHTML={{ __html: post?.content() }} />
+      </>
+    </Layout>
   );
 }
 
