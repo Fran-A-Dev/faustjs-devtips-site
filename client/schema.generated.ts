@@ -526,6 +526,8 @@ export enum ContentTypeEnum {
   /** The Type of Content object */
   DEVTERM = "DEVTERM",
   /** The Type of Content object */
+  FORMSUBMISSION = "FORMSUBMISSION",
+  /** The Type of Content object */
   PAGE = "PAGE",
   /** The Type of Content object */
   POST = "POST",
@@ -1984,7 +1986,6 @@ export enum ContentTypeIdTypeEnum {
 }
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
-
 export enum DevTermIdType {
   /** Identify a resource by the Database ID. */
   DATABASE_ID = "DATABASE_ID",
@@ -1994,11 +1995,60 @@ export enum DevTermIdType {
   SLUG = "SLUG",
   /** Identify a resource by the URI. */
   URI = "URI",
-  PRIMARY = "PRIMARY",
 }
 
 /** Arguments for filtering the RootQueryToDevTermConnection connection */
 export interface RootQueryToDevTermConnectionWhereArgs {
+  /** Filter the connection based on dates */
+  dateQuery?: Maybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: Maybe<Scalars["Boolean"]>;
+  /** Specific ID of the object */
+  id?: Maybe<Scalars["Int"]>;
+  /** Array of IDs for the objects to retrieve */
+  in?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: Maybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: Maybe<Scalars["String"]>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: Maybe<Array<Maybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: Maybe<Scalars["ID"]>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** Show posts with a specific password. */
+  password?: Maybe<Scalars["String"]>;
+  /** Show Posts based on a keyword search */
+  search?: Maybe<Scalars["String"]>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: Maybe<Array<Maybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: Maybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: Maybe<Scalars["String"]>;
+}
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum FormSubmissionIdType {
+  /** Identify a resource by the Database ID. */
+  DATABASE_ID = "DATABASE_ID",
+  /** Identify a resource by the (hashed) Global ID. */
+  ID = "ID",
+  /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
+  SLUG = "SLUG",
+  /** Identify a resource by the URI. */
+  URI = "URI",
+}
+
+/** Arguments for filtering the RootQueryToFormSubmissionConnection connection */
+export interface RootQueryToFormSubmissionConnectionWhereArgs {
   /** Filter the connection based on dates */
   dateQuery?: Maybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
@@ -2687,6 +2737,22 @@ export interface CreateDevTermInput {
   status?: Maybe<PostStatusEnum>;
 }
 
+/** Input for the createFormSubmission mutation */
+export interface CreateFormSubmissionInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: Maybe<Scalars["String"]>;
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: Maybe<Scalars["Int"]>;
+  /** The password used to protect the content of the object */
+  password?: Maybe<Scalars["String"]>;
+  /** The slug of the object */
+  slug?: Maybe<Scalars["String"]>;
+  /** The status of the object */
+  status?: Maybe<PostStatusEnum>;
+}
+
 /** Input for the createMediaItem mutation */
 export interface CreateMediaItemInput {
   /** Alternative text to display when mediaItem is not displayed */
@@ -2955,6 +3021,16 @@ export interface DeleteDevTermInput {
   id: Scalars["ID"];
 }
 
+/** Input for the deleteFormSubmission mutation */
+export interface DeleteFormSubmissionInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** Whether the object should be force deleted instead of being moved to the trash */
+  forceDelete?: Maybe<Scalars["Boolean"]>;
+  /** The ID of the formSubmission to delete */
+  id: Scalars["ID"];
+}
+
 /** Input for the deleteMediaItem mutation */
 export interface DeleteMediaItemInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -3089,6 +3165,18 @@ export interface SendPasswordResetEmailInput {
   username: Scalars["String"];
 }
 
+/** Input for the SubmitContactFormCF mutation */
+export interface SubmitContactFormCFInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** Email of the contact */
+  email: Scalars["String"];
+  /** Name of the contact */
+  name: Scalars["String"];
+  /** Phone number of the contact */
+  phone?: Maybe<Scalars["String"]>;
+}
+
 /** Input for the UpdateCategory mutation */
 export interface UpdateCategoryInput {
   /** The slug that the category will be an alias of */
@@ -3140,6 +3228,24 @@ export interface UpdateDevTermInput {
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: Maybe<Scalars["String"]>;
   /** The ID of the devTerm object */
+  id: Scalars["ID"];
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: Maybe<Scalars["Int"]>;
+  /** The password used to protect the content of the object */
+  password?: Maybe<Scalars["String"]>;
+  /** The slug of the object */
+  slug?: Maybe<Scalars["String"]>;
+  /** The status of the object */
+  status?: Maybe<PostStatusEnum>;
+}
+
+/** Input for the updateFormSubmission mutation */
+export interface UpdateFormSubmissionInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: Maybe<Scalars["String"]>;
+  /** The ID of the formSubmission object */
   id: Scalars["ID"];
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: Maybe<Scalars["Int"]>;
@@ -3391,6 +3497,7 @@ export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
   ContentNodeIdTypeEnum: true,
   ContentTypeIdTypeEnum: true,
   DevTermIdType: true,
+  FormSubmissionIdType: true,
   MediaItemIdType: true,
   MenuNodeIdTypeEnum: true,
   MenuLocationEnum: true,
@@ -3482,6 +3589,33 @@ export const generatedSchema = {
       },
     },
     discussionSettings: { __type: "DiscussionSettings" },
+    formSubmission: {
+      __type: "FormSubmission",
+      __args: {
+        id: "ID!",
+        idType: "FormSubmissionIdType",
+        asPreview: "Boolean",
+      },
+    },
+    formSubmissionBy: {
+      __type: "FormSubmission",
+      __args: {
+        id: "ID",
+        formSubmissionId: "Int",
+        uri: "String",
+        slug: "String",
+      },
+    },
+    formSubmissions: {
+      __type: "RootQueryToFormSubmissionConnection",
+      __args: {
+        first: "Int",
+        last: "Int",
+        after: "String",
+        before: "String",
+        where: "RootQueryToFormSubmissionConnectionWhereArgs",
+      },
+    },
     generalSettings: { __type: "GeneralSettings" },
     mediaItem: {
       __type: "MediaItem",
@@ -3686,6 +3820,10 @@ export const generatedSchema = {
       __type: "CreateDevTermPayload",
       __args: { input: "CreateDevTermInput!" },
     },
+    createFormSubmission: {
+      __type: "CreateFormSubmissionPayload",
+      __args: { input: "CreateFormSubmissionInput!" },
+    },
     createMediaItem: {
       __type: "CreateMediaItemPayload",
       __args: { input: "CreateMediaItemInput!" },
@@ -3721,6 +3859,10 @@ export const generatedSchema = {
     deleteDevTerm: {
       __type: "DeleteDevTermPayload",
       __args: { input: "DeleteDevTermInput!" },
+    },
+    deleteFormSubmission: {
+      __type: "DeleteFormSubmissionPayload",
+      __args: { input: "DeleteFormSubmissionInput!" },
     },
     deleteMediaItem: {
       __type: "DeleteMediaItemPayload",
@@ -3767,6 +3909,10 @@ export const generatedSchema = {
       __type: "SendPasswordResetEmailPayload",
       __args: { input: "SendPasswordResetEmailInput!" },
     },
+    submitContactFormCF: {
+      __type: "SubmitContactFormCFPayload",
+      __args: { input: "SubmitContactFormCFInput!" },
+    },
     updateCategory: {
       __type: "UpdateCategoryPayload",
       __args: { input: "UpdateCategoryInput!" },
@@ -3778,6 +3924,10 @@ export const generatedSchema = {
     updateDevTerm: {
       __type: "UpdateDevTermPayload",
       __args: { input: "UpdateDevTermInput!" },
+    },
+    updateFormSubmission: {
+      __type: "UpdateFormSubmissionPayload",
+      __args: { input: "UpdateFormSubmissionInput!" },
     },
     updateMediaItem: {
       __type: "UpdateMediaItemPayload",
@@ -6241,6 +6391,81 @@ export const generatedSchema = {
     defaultCommentStatus: { __type: "String" },
     defaultPingStatus: { __type: "String" },
   },
+  FormSubmission: {
+    __typename: { __type: "String!" },
+    conditionalTags: { __type: "ConditionalTags" },
+    contentType: { __type: "ContentNodeToContentTypeConnectionEdge" },
+    databaseId: { __type: "Int!" },
+    date: { __type: "String" },
+    dateGmt: { __type: "String" },
+    desiredSlug: { __type: "String" },
+    editingLockedBy: { __type: "ContentNodeToEditLockConnectionEdge" },
+    email: { __type: "String" },
+    enclosure: { __type: "String" },
+    enqueuedScripts: {
+      __type: "ContentNodeToEnqueuedScriptConnection",
+      __args: { first: "Int", last: "Int", after: "String", before: "String" },
+    },
+    enqueuedStylesheets: {
+      __type: "ContentNodeToEnqueuedStylesheetConnection",
+      __args: { first: "Int", last: "Int", after: "String", before: "String" },
+    },
+    formSubmissionId: { __type: "Int!" },
+    guid: { __type: "String" },
+    id: { __type: "ID!" },
+    isContentNode: { __type: "Boolean!" },
+    isPreview: { __type: "Boolean" },
+    isRestricted: { __type: "Boolean" },
+    isTermNode: { __type: "Boolean!" },
+    lastEditedBy: { __type: "ContentNodeToEditLastConnectionEdge" },
+    link: { __type: "String" },
+    modified: { __type: "String" },
+    modifiedGmt: { __type: "String" },
+    name: { __type: "String" },
+    preview: { __type: "FormSubmissionToPreviewConnectionEdge" },
+    previewRevisionDatabaseId: { __type: "Int" },
+    previewRevisionId: { __type: "ID" },
+    slug: { __type: "String" },
+    status: { __type: "String" },
+    subject: { __type: "String" },
+    template: { __type: "ContentTemplate" },
+    templates: { __type: "[String]" },
+    uri: { __type: "String" },
+  },
+  FormSubmissionToPreviewConnectionEdge: {
+    __typename: { __type: "String!" },
+    node: { __type: "FormSubmission" },
+  },
+  RootQueryToFormSubmissionConnectionWhereArgs: {
+    dateQuery: { __type: "DateQueryInput" },
+    hasPassword: { __type: "Boolean" },
+    id: { __type: "Int" },
+    in: { __type: "[ID]" },
+    mimeType: { __type: "MimeTypeEnum" },
+    name: { __type: "String" },
+    nameIn: { __type: "[String]" },
+    notIn: { __type: "[ID]" },
+    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
+    parent: { __type: "ID" },
+    parentIn: { __type: "[ID]" },
+    parentNotIn: { __type: "[ID]" },
+    password: { __type: "String" },
+    search: { __type: "String" },
+    stati: { __type: "[PostStatusEnum]" },
+    status: { __type: "PostStatusEnum" },
+    title: { __type: "String" },
+  },
+  RootQueryToFormSubmissionConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[RootQueryToFormSubmissionConnectionEdge]" },
+    nodes: { __type: "[FormSubmission]" },
+    pageInfo: { __type: "WPPageInfo" },
+  },
+  RootQueryToFormSubmissionConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "FormSubmission" },
+  },
   GeneralSettings: {
     __typename: { __type: "String!" },
     dateFormat: { __type: "String" },
@@ -6802,6 +7027,19 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     devTerm: { __type: "DevTerm" },
   },
+  CreateFormSubmissionInput: {
+    clientMutationId: { __type: "String" },
+    date: { __type: "String" },
+    menuOrder: { __type: "Int" },
+    password: { __type: "String" },
+    slug: { __type: "String" },
+    status: { __type: "PostStatusEnum" },
+  },
+  CreateFormSubmissionPayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    formSubmission: { __type: "FormSubmission" },
+  },
   CreateMediaItemInput: {
     altText: { __type: "String" },
     authorId: { __type: "ID" },
@@ -6978,6 +7216,17 @@ export const generatedSchema = {
     deletedId: { __type: "ID" },
     devTerm: { __type: "DevTerm" },
   },
+  DeleteFormSubmissionInput: {
+    clientMutationId: { __type: "String" },
+    forceDelete: { __type: "Boolean" },
+    id: { __type: "ID!" },
+  },
+  DeleteFormSubmissionPayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    deletedId: { __type: "ID" },
+    formSubmission: { __type: "FormSubmission" },
+  },
   DeleteMediaItemInput: {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
@@ -7108,6 +7357,21 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     user: { __type: "User" },
   },
+  SubmitContactFormCFInput: {
+    clientMutationId: { __type: "String" },
+    email: { __type: "String!" },
+    name: { __type: "String!" },
+    phone: { __type: "String" },
+  },
+  SubmitContactFormCFPayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    email: { __type: "String" },
+    errors: { __type: "[String]" },
+    name: { __type: "String" },
+    phone: { __type: "String" },
+    successMessage: { __type: "String" },
+  },
   UpdateCategoryInput: {
     aliasOf: { __type: "String" },
     clientMutationId: { __type: "String" },
@@ -7154,6 +7418,20 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     clientMutationId: { __type: "String" },
     devTerm: { __type: "DevTerm" },
+  },
+  UpdateFormSubmissionInput: {
+    clientMutationId: { __type: "String" },
+    date: { __type: "String" },
+    id: { __type: "ID!" },
+    menuOrder: { __type: "Int" },
+    password: { __type: "String" },
+    slug: { __type: "String" },
+    status: { __type: "PostStatusEnum" },
+  },
+  UpdateFormSubmissionPayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    formSubmission: { __type: "FormSubmission" },
   },
   UpdateMediaItemInput: {
     altText: { __type: "String" },
@@ -7388,6 +7666,24 @@ export interface Query {
     where?: Maybe<RootQueryToDevTermConnectionWhereArgs>;
   }) => Maybe<RootQueryToDevTermConnection>;
   discussionSettings?: Maybe<DiscussionSettings>;
+  formSubmission: (args: {
+    id: Scalars["ID"];
+    idType?: Maybe<FormSubmissionIdType>;
+    asPreview?: Maybe<Scalars["Boolean"]>;
+  }) => Maybe<FormSubmission>;
+  formSubmissionBy: (args?: {
+    id?: Maybe<Scalars["ID"]>;
+    formSubmissionId?: Maybe<Scalars["Int"]>;
+    uri?: Maybe<Scalars["String"]>;
+    slug?: Maybe<Scalars["String"]>;
+  }) => Maybe<FormSubmission>;
+  formSubmissions: (args?: {
+    first?: Maybe<Scalars["Int"]>;
+    last?: Maybe<Scalars["Int"]>;
+    after?: Maybe<Scalars["String"]>;
+    before?: Maybe<Scalars["String"]>;
+    where?: Maybe<RootQueryToFormSubmissionConnectionWhereArgs>;
+  }) => Maybe<RootQueryToFormSubmissionConnection>;
   generalSettings?: Maybe<GeneralSettings>;
   mediaItem: (args: {
     id: Scalars["ID"];
@@ -7576,6 +7872,9 @@ export interface Mutation {
   createDevTerm: (args: {
     input: CreateDevTermInput;
   }) => Maybe<CreateDevTermPayload>;
+  createFormSubmission: (args: {
+    input: CreateFormSubmissionInput;
+  }) => Maybe<CreateFormSubmissionPayload>;
   createMediaItem: (args: {
     input: CreateMediaItemInput;
   }) => Maybe<CreateMediaItemPayload>;
@@ -7595,6 +7894,9 @@ export interface Mutation {
   deleteDevTerm: (args: {
     input: DeleteDevTermInput;
   }) => Maybe<DeleteDevTermPayload>;
+  deleteFormSubmission: (args: {
+    input: DeleteFormSubmissionInput;
+  }) => Maybe<DeleteFormSubmissionPayload>;
   deleteMediaItem: (args: {
     input: DeleteMediaItemInput;
   }) => Maybe<DeleteMediaItemPayload>;
@@ -7623,6 +7925,9 @@ export interface Mutation {
   sendPasswordResetEmail: (args: {
     input: SendPasswordResetEmailInput;
   }) => Maybe<SendPasswordResetEmailPayload>;
+  submitContactFormCF: (args: {
+    input: SubmitContactFormCFInput;
+  }) => Maybe<SubmitContactFormCFPayload>;
   updateCategory: (args: {
     input: UpdateCategoryInput;
   }) => Maybe<UpdateCategoryPayload>;
@@ -7632,6 +7937,9 @@ export interface Mutation {
   updateDevTerm: (args: {
     input: UpdateDevTermInput;
   }) => Maybe<UpdateDevTermPayload>;
+  updateFormSubmission: (args: {
+    input: UpdateFormSubmissionInput;
+  }) => Maybe<UpdateFormSubmissionPayload>;
   updateMediaItem: (args: {
     input: UpdateMediaItemInput;
   }) => Maybe<UpdateMediaItemPayload>;
@@ -7770,18 +8078,18 @@ export interface Category
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<CategoryToAncestorsCategoryConnection>;
   /**
@@ -7796,22 +8104,22 @@ export interface Category
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<CategoryToCategoryConnectionWhereArgs>;
   }) => Maybe<CategoryToCategoryConnection>;
   conditionalTags?: Maybe<ConditionalTags>;
@@ -7822,22 +8130,22 @@ export interface Category
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<CategoryToContentNodeConnectionWhereArgs>;
   }) => Maybe<CategoryToContentNodeConnection>;
   /**
@@ -7859,18 +8167,18 @@ export interface Category
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedScriptConnection>;
   /**
@@ -7880,18 +8188,18 @@ export interface Category
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /**
@@ -7937,22 +8245,22 @@ export interface Category
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<CategoryToPostConnectionWhereArgs>;
   }) => Maybe<CategoryToPostConnection>;
   /**
@@ -8014,18 +8322,18 @@ export interface TermNode {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedScriptConnection>;
   /**
@@ -8035,18 +8343,18 @@ export interface TermNode {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /**
@@ -8600,18 +8908,18 @@ export interface ContentNode {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
   /**
@@ -8621,18 +8929,18 @@ export interface ContentNode {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /**
@@ -8732,18 +9040,18 @@ export interface ContentType
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentTypeToTaxonomyConnection>;
   /**
@@ -8753,22 +9061,22 @@ export interface ContentType
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<ContentTypeToContentNodeConnectionWhereArgs>;
   }) => Maybe<ContentTypeToContentNodeConnection>;
   /**
@@ -8936,18 +9244,18 @@ export interface Taxonomy extends Omit<Node, "__typename"> {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TaxonomyToContentTypeConnection>;
   /**
@@ -9235,14 +9543,14 @@ export interface User
      * The size attribute of the avatar field can be used to fetch avatars of different sizes. The value corresponds to the dimension in pixels to fetch. The default is 96 pixels.
      * @defaultValue `96`
      */
-    size?: Maybe<Scalars["Int"]>;
+    size?: Maybe<Scalars["Int"]>
     /**
      * Whether to always show the default image, never the Gravatar. Default false
-     */
-    forceDefault?: Maybe<Scalars["Boolean"]>;
+     */;
+    forceDefault?: Maybe<Scalars["Boolean"]>
     /**
      * The rating level of the avatar.
-     */
+     */;
     rating?: Maybe<AvatarRatingEnum>;
   }) => Maybe<Avatar>;
   /**
@@ -9260,22 +9568,22 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<UserToCommentConnectionWhereArgs>;
   }) => Maybe<UserToCommentConnection>;
   conditionalTags?: Maybe<ConditionalTags>;
@@ -9298,18 +9606,18 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<UserToEnqueuedScriptConnection>;
   /**
@@ -9319,18 +9627,18 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<UserToEnqueuedStylesheetConnection>;
   /**
@@ -9372,22 +9680,22 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<UserToMediaItemConnectionWhereArgs>;
   }) => Maybe<UserToMediaItemConnection>;
   /**
@@ -9409,22 +9717,22 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<UserToPageConnectionWhereArgs>;
   }) => Maybe<UserToPageConnection>;
   /**
@@ -9434,22 +9742,22 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<UserToPostConnectionWhereArgs>;
   }) => Maybe<UserToPostConnection>;
   /**
@@ -9463,22 +9771,22 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<UserToContentRevisionUnionConnectionWhereArgs>;
   }) => Maybe<UserToContentRevisionUnionConnection>;
   /**
@@ -9488,18 +9796,18 @@ export interface User
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<UserToUserRoleConnection>;
   /**
@@ -9731,22 +10039,22 @@ export interface Comment
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<CommentToCommentConnectionWhereArgs>;
   }) => Maybe<CommentToCommentConnection>;
   /**
@@ -9949,22 +10257,22 @@ export interface MediaItem
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs>;
   }) => Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /**
@@ -9995,22 +10303,22 @@ export interface MediaItem
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
   }) => Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
   /**
@@ -10028,22 +10336,22 @@ export interface MediaItem
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<MediaItemToCommentConnectionWhereArgs>;
   }) => Maybe<MediaItemToCommentConnection>;
   conditionalTags?: Maybe<ConditionalTags>;
@@ -10091,18 +10399,18 @@ export interface MediaItem
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
   /**
@@ -10112,18 +10420,18 @@ export interface MediaItem
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /**
@@ -10366,22 +10674,22 @@ export interface HierarchicalContentNode {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs>;
   }) => Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /**
@@ -10391,22 +10699,22 @@ export interface HierarchicalContentNode {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
   }) => Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
   /**
@@ -10807,22 +11115,22 @@ export interface Page
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs>;
   }) => Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
   /**
@@ -10844,22 +11152,22 @@ export interface Page
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
   }) => Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
   /**
@@ -10877,22 +11185,22 @@ export interface Page
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PageToCommentConnectionWhereArgs>;
   }) => Maybe<PageToCommentConnection>;
   conditionalTags?: Maybe<ConditionalTags>;
@@ -10940,18 +11248,18 @@ export interface Page
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
   /**
@@ -10961,18 +11269,18 @@ export interface Page
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /**
@@ -11096,22 +11404,22 @@ export interface Page
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PageToRevisionConnectionWhereArgs>;
   }) => Maybe<PageToRevisionConnection>;
   /**
@@ -11199,18 +11507,18 @@ export interface NodeWithFeaturedImage {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
   /**
@@ -11220,18 +11528,18 @@ export interface NodeWithFeaturedImage {
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /**
@@ -11528,22 +11836,22 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostToCategoryConnectionWhereArgs>;
   }) => Maybe<PostToCategoryConnection>;
   /**
@@ -11561,22 +11869,22 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostToCommentConnectionWhereArgs>;
   }) => Maybe<PostToCommentConnection>;
   conditionalTags?: Maybe<ConditionalTags>;
@@ -11624,18 +11932,18 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
   /**
@@ -11645,18 +11953,18 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /**
@@ -11743,22 +12051,22 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostToPostFormatConnectionWhereArgs>;
   }) => Maybe<PostToPostFormatConnection>;
   /**
@@ -11789,22 +12097,22 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostToRevisionConnectionWhereArgs>;
   }) => Maybe<PostToRevisionConnection>;
   /**
@@ -11822,22 +12130,22 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostToTagConnectionWhereArgs>;
   }) => Maybe<PostToTagConnection>;
   /**
@@ -11852,22 +12160,22 @@ export interface Post
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostToTermNodeConnectionWhereArgs>;
   }) => Maybe<PostToTermNodeConnection>;
   /**
@@ -12027,22 +12335,22 @@ export interface PostFormat
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostFormatToContentNodeConnectionWhereArgs>;
   }) => Maybe<PostFormatToContentNodeConnection>;
   /**
@@ -12064,18 +12372,18 @@ export interface PostFormat
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedScriptConnection>;
   /**
@@ -12085,18 +12393,18 @@ export interface PostFormat
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /**
@@ -12135,22 +12443,22 @@ export interface PostFormat
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<PostFormatToPostConnectionWhereArgs>;
   }) => Maybe<PostFormatToPostConnection>;
   /**
@@ -12352,22 +12660,22 @@ export interface Tag
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<TagToContentNodeConnectionWhereArgs>;
   }) => Maybe<TagToContentNodeConnection>;
   /**
@@ -12389,18 +12697,18 @@ export interface Tag
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedScriptConnection>;
   /**
@@ -12410,18 +12718,18 @@ export interface Tag
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /**
@@ -12455,22 +12763,22 @@ export interface Tag
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<TagToPostConnectionWhereArgs>;
   }) => Maybe<TagToPostConnection>;
   /**
@@ -12876,7 +13184,6 @@ export interface DevTerm
     Omit<UniformResourceIdentifiable, "__typename">,
     Omit<DatabaseIdentifier, "__typename">,
     Omit<NodeWithTemplate, "__typename"> {
-  nodes: any;
   __typename: "DevTerm" | undefined;
   conditionalTags?: Maybe<ConditionalTags>;
   /**
@@ -12920,18 +13227,18 @@ export interface DevTerm
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
   /**
@@ -12941,18 +13248,18 @@ export interface DevTerm
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
+     */;
     before?: Maybe<Scalars["String"]>;
   }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /**
@@ -13088,6 +13395,211 @@ export interface DiscussionSettings {
 }
 
 /**
+ * The formSubmission type
+ */
+export interface FormSubmission
+  extends Omit<Node, "__typename">,
+    Omit<ContentNode, "__typename">,
+    Omit<UniformResourceIdentifiable, "__typename">,
+    Omit<DatabaseIdentifier, "__typename">,
+    Omit<NodeWithTemplate, "__typename"> {
+  __typename: "FormSubmission" | undefined;
+  conditionalTags?: Maybe<ConditionalTags>;
+  /**
+   * Connection between the ContentNode type and the ContentType type
+   */
+  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
+  /**
+   * The unique identifier stored in the database
+   */
+  databaseId: ScalarsEnums["Int"];
+  /**
+   * Post publishing date.
+   */
+  date?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The publishing date set in GMT.
+   */
+  dateGmt?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The desired slug of the post
+   */
+  desiredSlug?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
+   */
+  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
+  email?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The RSS enclosure for the object
+   */
+  enclosure?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Connection between the ContentNode type and the EnqueuedScript type
+   */
+  enqueuedScripts: (args?: {
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */;
+    last?: Maybe<Scalars["Int"]>
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */;
+    after?: Maybe<Scalars["String"]>
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */;
+    before?: Maybe<Scalars["String"]>;
+  }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
+  /**
+   * Connection between the ContentNode type and the EnqueuedStylesheet type
+   */
+  enqueuedStylesheets: (args?: {
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */;
+    last?: Maybe<Scalars["Int"]>
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */;
+    after?: Maybe<Scalars["String"]>
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */;
+    before?: Maybe<Scalars["String"]>;
+  }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
+  /**
+   * The id field matches the WP_Post-&gt;ID field.
+   * @deprecated Deprecated in favor of the databaseId field
+   */
+  formSubmissionId: ScalarsEnums["Int"];
+  /**
+   * The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+   */
+  guid?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The globally unique identifier of the formsubmission object.
+   */
+  id: ScalarsEnums["ID"];
+  /**
+   * Whether the node is a Content Node
+   */
+  isContentNode: ScalarsEnums["Boolean"];
+  /**
+   * Whether the object is a node in the preview state
+   */
+  isPreview?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * Whether the object is restricted from the current viewer
+   */
+  isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * Whether the node is a Term
+   */
+  isTermNode: ScalarsEnums["Boolean"];
+  /**
+   * The user that most recently edited the node
+   */
+  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
+  /**
+   * The permalink of the post
+   */
+  link?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
+   */
+  modified?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
+   */
+  modifiedGmt?: Maybe<ScalarsEnums["String"]>;
+  name?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Connection between the formSubmission type and the formSubmission type
+   */
+  preview?: Maybe<FormSubmissionToPreviewConnectionEdge>;
+  /**
+   * The database id of the preview node
+   */
+  previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * Whether the object is a node in the preview state
+   */
+  previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+   */
+  slug?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The current status of the object
+   */
+  status?: Maybe<ScalarsEnums["String"]>;
+  subject?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The template assigned to the node
+   */
+  template?: Maybe<ContentTemplate>;
+  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  /**
+   * The unique resource identifier path
+   */
+  uri?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the formSubmission type and the formSubmission type
+ */
+export interface FormSubmissionToPreviewConnectionEdge {
+  __typename: "FormSubmissionToPreviewConnectionEdge" | undefined;
+  /**
+   * The node of the connection, without the edges
+   */
+  node?: Maybe<FormSubmission>;
+}
+
+/**
+ * Connection between the RootQuery type and the formSubmission type
+ */
+export interface RootQueryToFormSubmissionConnection {
+  __typename: "RootQueryToFormSubmissionConnection" | undefined;
+  /**
+   * Edges for the RootQueryToFormSubmissionConnection connection
+   */
+  edges?: Maybe<Array<Maybe<RootQueryToFormSubmissionConnectionEdge>>>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes?: Maybe<Array<Maybe<FormSubmission>>>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo?: Maybe<WPPageInfo>;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface RootQueryToFormSubmissionConnectionEdge {
+  __typename: "RootQueryToFormSubmissionConnectionEdge" | undefined;
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node?: Maybe<FormSubmission>;
+}
+
+/**
  * The general setting type
  */
 export interface GeneralSettings {
@@ -13203,22 +13715,22 @@ export interface Menu
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<MenuToMenuItemConnectionWhereArgs>;
   }) => Maybe<MenuToMenuItemConnection>;
   /**
@@ -13279,22 +13791,22 @@ export interface MenuItem
     /**
      * The number of items to return after the referenced "after" cursor
      */
-    first?: Maybe<Scalars["Int"]>;
+    first?: Maybe<Scalars["Int"]>
     /**
      * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
+     */;
+    last?: Maybe<Scalars["Int"]>
     /**
      * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
+     */;
+    after?: Maybe<Scalars["String"]>
     /**
      * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
+     */;
+    before?: Maybe<Scalars["String"]>
     /**
      * Arguments for filtering the connection
-     */
+     */;
     where?: Maybe<MenuItemToMenuItemConnectionWhereArgs>;
   }) => Maybe<MenuItemToMenuItemConnection>;
   /**
@@ -14117,6 +14629,21 @@ export interface CreateDevTermPayload {
 }
 
 /**
+ * The payload for the createFormSubmission mutation
+ */
+export interface CreateFormSubmissionPayload {
+  __typename: "CreateFormSubmissionPayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Post object mutation type.
+   */
+  formSubmission?: Maybe<FormSubmission>;
+}
+
+/**
  * The payload for the createMediaItem mutation
  */
 export interface CreateMediaItemPayload {
@@ -14261,6 +14788,25 @@ export interface DeleteDevTermPayload {
    * The object before it was deleted
    */
   devTerm?: Maybe<DevTerm>;
+}
+
+/**
+ * The payload for the deleteFormSubmission mutation
+ */
+export interface DeleteFormSubmissionPayload {
+  __typename: "DeleteFormSubmissionPayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The ID of the deleted object
+   */
+  deletedId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The object before it was deleted
+   */
+  formSubmission?: Maybe<FormSubmission>;
 }
 
 /**
@@ -14461,6 +15007,34 @@ export interface SendPasswordResetEmailPayload {
 }
 
 /**
+ * The payload for the SubmitContactFormCF mutation
+ */
+export interface SubmitContactFormCFPayload {
+  __typename: "SubmitContactFormCFPayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Email of the contact
+   */
+  email?: Maybe<ScalarsEnums["String"]>;
+  errors?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  /**
+   * Name of the contact
+   */
+  name?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Phone number of the contact
+   */
+  phone?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Message returned when successful
+   */
+  successMessage?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
  * The payload for the UpdateCategory mutation
  */
 export interface UpdateCategoryPayload {
@@ -14507,6 +15081,21 @@ export interface UpdateDevTermPayload {
    * The Post object mutation type.
    */
   devTerm?: Maybe<DevTerm>;
+}
+
+/**
+ * The payload for the updateFormSubmission mutation
+ */
+export interface UpdateFormSubmissionPayload {
+  __typename: "UpdateFormSubmissionPayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Post object mutation type.
+   */
+  formSubmission?: Maybe<FormSubmission>;
 }
 
 /**
@@ -14831,6 +15420,10 @@ export interface SchemaObjectTypes {
   RootQueryToDevTermConnection: RootQueryToDevTermConnection;
   RootQueryToDevTermConnectionEdge: RootQueryToDevTermConnectionEdge;
   DiscussionSettings: DiscussionSettings;
+  FormSubmission: FormSubmission;
+  FormSubmissionToPreviewConnectionEdge: FormSubmissionToPreviewConnectionEdge;
+  RootQueryToFormSubmissionConnection: RootQueryToFormSubmissionConnection;
+  RootQueryToFormSubmissionConnectionEdge: RootQueryToFormSubmissionConnectionEdge;
   GeneralSettings: GeneralSettings;
   RootQueryToMediaItemConnection: RootQueryToMediaItemConnection;
   RootQueryToMediaItemConnectionEdge: RootQueryToMediaItemConnectionEdge;
@@ -14879,6 +15472,7 @@ export interface SchemaObjectTypes {
   CreateCategoryPayload: CreateCategoryPayload;
   CreateCommentPayload: CreateCommentPayload;
   CreateDevTermPayload: CreateDevTermPayload;
+  CreateFormSubmissionPayload: CreateFormSubmissionPayload;
   CreateMediaItemPayload: CreateMediaItemPayload;
   CreatePagePayload: CreatePagePayload;
   CreatePostPayload: CreatePostPayload;
@@ -14888,6 +15482,7 @@ export interface SchemaObjectTypes {
   DeleteCategoryPayload: DeleteCategoryPayload;
   DeleteCommentPayload: DeleteCommentPayload;
   DeleteDevTermPayload: DeleteDevTermPayload;
+  DeleteFormSubmissionPayload: DeleteFormSubmissionPayload;
   DeleteMediaItemPayload: DeleteMediaItemPayload;
   DeletePagePayload: DeletePagePayload;
   DeletePostPayload: DeletePostPayload;
@@ -14899,9 +15494,11 @@ export interface SchemaObjectTypes {
   ResetUserPasswordPayload: ResetUserPasswordPayload;
   RestoreCommentPayload: RestoreCommentPayload;
   SendPasswordResetEmailPayload: SendPasswordResetEmailPayload;
+  SubmitContactFormCFPayload: SubmitContactFormCFPayload;
   UpdateCategoryPayload: UpdateCategoryPayload;
   UpdateCommentPayload: UpdateCommentPayload;
   UpdateDevTermPayload: UpdateDevTermPayload;
+  UpdateFormSubmissionPayload: UpdateFormSubmissionPayload;
   UpdateMediaItemPayload: UpdateMediaItemPayload;
   UpdatePagePayload: UpdatePagePayload;
   UpdatePostPayload: UpdatePostPayload;
@@ -15058,6 +15655,10 @@ export type SchemaObjectTypesNames =
   | "RootQueryToDevTermConnection"
   | "RootQueryToDevTermConnectionEdge"
   | "DiscussionSettings"
+  | "FormSubmission"
+  | "FormSubmissionToPreviewConnectionEdge"
+  | "RootQueryToFormSubmissionConnection"
+  | "RootQueryToFormSubmissionConnectionEdge"
   | "GeneralSettings"
   | "RootQueryToMediaItemConnection"
   | "RootQueryToMediaItemConnectionEdge"
@@ -15106,6 +15707,7 @@ export type SchemaObjectTypesNames =
   | "CreateCategoryPayload"
   | "CreateCommentPayload"
   | "CreateDevTermPayload"
+  | "CreateFormSubmissionPayload"
   | "CreateMediaItemPayload"
   | "CreatePagePayload"
   | "CreatePostPayload"
@@ -15115,6 +15717,7 @@ export type SchemaObjectTypesNames =
   | "DeleteCategoryPayload"
   | "DeleteCommentPayload"
   | "DeleteDevTermPayload"
+  | "DeleteFormSubmissionPayload"
   | "DeleteMediaItemPayload"
   | "DeletePagePayload"
   | "DeletePostPayload"
@@ -15126,9 +15729,11 @@ export type SchemaObjectTypesNames =
   | "ResetUserPasswordPayload"
   | "RestoreCommentPayload"
   | "SendPasswordResetEmailPayload"
+  | "SubmitContactFormCFPayload"
   | "UpdateCategoryPayload"
   | "UpdateCommentPayload"
   | "UpdateDevTermPayload"
+  | "UpdateFormSubmissionPayload"
   | "UpdateMediaItemPayload"
   | "UpdatePagePayload"
   | "UpdatePostPayload"
@@ -15166,22 +15771,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToCategoryConnectionWhereArgs>;
       }) => Maybe<PostToCategoryConnection>;
       children?: undefined;
@@ -15200,22 +15805,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToCommentConnectionWhereArgs>;
       }) => Maybe<PostToCommentConnection>;
       conditionalTags?: Maybe<ConditionalTags>;
@@ -15263,18 +15868,18 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
       /**
@@ -15284,18 +15889,18 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
       /**
@@ -15390,22 +15995,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToPostFormatConnectionWhereArgs>;
       }) => Maybe<PostToPostFormatConnection>;
       /**
@@ -15436,22 +16041,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToRevisionConnectionWhereArgs>;
       }) => Maybe<PostToRevisionConnection>;
       /**
@@ -15469,22 +16074,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToTagConnectionWhereArgs>;
       }) => Maybe<PostToTagConnection>;
       /**
@@ -15499,22 +16104,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToTermNodeConnectionWhereArgs>;
       }) => Maybe<PostToTermNodeConnection>;
       /**
@@ -15544,22 +16149,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs>;
       }) => Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
       /**
@@ -15582,22 +16187,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
       }) => Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
       /**
@@ -15615,22 +16220,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PageToCommentConnectionWhereArgs>;
       }) => Maybe<PageToCommentConnection>;
       conditionalTags?: Maybe<ConditionalTags>;
@@ -15678,18 +16283,18 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
       /**
@@ -15699,18 +16304,18 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
       /**
@@ -15839,22 +16444,22 @@ export type ContentRevisionUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PageToRevisionConnectionWhereArgs>;
       }) => Maybe<PageToRevisionConnection>;
       /**
@@ -15913,22 +16518,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToCategoryConnectionWhereArgs>;
       }) => Maybe<PostToCategoryConnection>;
       categoryId?: undefined;
@@ -15948,22 +16553,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToCommentConnectionWhereArgs>;
       }) => Maybe<PostToCommentConnection>;
       conditionalTags?: Maybe<ConditionalTags>;
@@ -16014,18 +16619,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
       /**
@@ -16035,18 +16640,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
       /**
@@ -16142,22 +16747,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToPostFormatConnectionWhereArgs>;
       }) => Maybe<PostToPostFormatConnection>;
       /**
@@ -16189,22 +16794,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToRevisionConnectionWhereArgs>;
       }) => Maybe<PostToRevisionConnection>;
       /**
@@ -16223,22 +16828,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToTagConnectionWhereArgs>;
       }) => Maybe<PostToTagConnection>;
       taxonomy?: undefined;
@@ -16256,22 +16861,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PostToTermNodeConnectionWhereArgs>;
       }) => Maybe<PostToTermNodeConnection>;
       /**
@@ -16301,22 +16906,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs>;
       }) => Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
       /**
@@ -16340,22 +16945,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
       }) => Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
       /**
@@ -16373,22 +16978,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PageToCommentConnectionWhereArgs>;
       }) => Maybe<PageToCommentConnection>;
       conditionalTags?: Maybe<ConditionalTags>;
@@ -16439,18 +17044,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
       /**
@@ -16460,18 +17065,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
       /**
@@ -16602,22 +17207,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<PageToRevisionConnectionWhereArgs>;
       }) => Maybe<PageToRevisionConnection>;
       /**
@@ -16663,18 +17268,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<CategoryToAncestorsCategoryConnection>;
       author?: undefined;
@@ -16693,22 +17298,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<CategoryToCategoryConnectionWhereArgs>;
       }) => Maybe<CategoryToCategoryConnection>;
       commentCount?: undefined;
@@ -16723,22 +17328,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<CategoryToContentNodeConnectionWhereArgs>;
       }) => Maybe<CategoryToContentNodeConnection>;
       contentType?: undefined;
@@ -16766,18 +17371,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<TermNodeToEnqueuedScriptConnection>;
       /**
@@ -16787,18 +17392,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
       excerpt?: undefined;
@@ -16864,22 +17469,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<CategoryToPostConnectionWhereArgs>;
       }) => Maybe<CategoryToPostConnection>;
       preview?: undefined;
@@ -16937,22 +17542,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<TagToContentNodeConnectionWhereArgs>;
       }) => Maybe<TagToContentNodeConnection>;
       contentType?: undefined;
@@ -16980,18 +17585,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<TermNodeToEnqueuedScriptConnection>;
       /**
@@ -17001,18 +17606,18 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
+         */;
         before?: Maybe<Scalars["String"]>;
       }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
       excerpt?: undefined;
@@ -17069,22 +17674,22 @@ export type MenuItemObjectUnion =
         /**
          * The number of items to return after the referenced "after" cursor
          */
-        first?: Maybe<Scalars["Int"]>;
+        first?: Maybe<Scalars["Int"]>
         /**
          * The number of items to return before the referenced "before" cursor
-         */
-        last?: Maybe<Scalars["Int"]>;
+         */;
+        last?: Maybe<Scalars["Int"]>
         /**
          * Cursor used along with the "first" argument to reference where in the dataset to get data
-         */
-        after?: Maybe<Scalars["String"]>;
+         */;
+        after?: Maybe<Scalars["String"]>
         /**
          * Cursor used along with the "last" argument to reference where in the dataset to get data
-         */
-        before?: Maybe<Scalars["String"]>;
+         */;
+        before?: Maybe<Scalars["String"]>
         /**
          * Arguments for filtering the connection
-         */
+         */;
         where?: Maybe<TagToPostConnectionWhereArgs>;
       }) => Maybe<TagToPostConnection>;
       preview?: undefined;
@@ -17682,6 +18287,7 @@ export interface ScalarsEnums extends MakeNullable<Scalars> {
   ContentNodeIdTypeEnum: ContentNodeIdTypeEnum | undefined;
   ContentTypeIdTypeEnum: ContentTypeIdTypeEnum | undefined;
   DevTermIdType: DevTermIdType | undefined;
+  FormSubmissionIdType: FormSubmissionIdType | undefined;
   MediaItemIdType: MediaItemIdType | undefined;
   MenuNodeIdTypeEnum: MenuNodeIdTypeEnum | undefined;
   MenuLocationEnum: MenuLocationEnum | undefined;

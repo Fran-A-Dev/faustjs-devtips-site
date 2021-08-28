@@ -13,8 +13,12 @@ const Nav = () => {
         </Link>
 
         <div>
-          <Link href="/termsubmit" passHref>
-            <Emoji symbol="🚀 ⚛️ 🧗🏾‍♂️ 🤓" label="submit a term" size="2.1rem" />
+          <Link href="/" passHref>
+            <Emoji
+              symbol="🚀 ⚛️ 🧗🏾‍♂️ 🤓"
+              label="Want to learn a new term or read about a new topic? Submit it here!"
+              size="2.1rem"
+            />
           </Link>
         </div>
         <Link href="/posts">Headless Bloggin</Link>
