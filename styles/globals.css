@@ -9,8 +9,8 @@
 
 [data-theme="light"] {
   --shadow-color: rgba(0, 0, 0, 0.3);
-  --color: black;
-  --bg-color: white;
+  --color: rgb(0, 0, 0);
+  --bg-color: rgb(238, 232, 232);
   --border-color: invert(rgb(47, 51, 54));
 }
 
@@ -20,7 +20,7 @@ body {
 
 .loader {
   color: rgb(41, 243, 0);
-
+  --color: black;
   font-family: monospace;
   font-size: xx-large;
   text-align: center;

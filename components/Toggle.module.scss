@@ -36,11 +36,12 @@
 }
 
 input:checked + .slider {
-  background-color: black;
+  background-color: rgb(0, 0, 0);
+  
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px black;
+  box-shadow: 0 0 1px rgb(0, 0, 0);
 }
 
 input:checked + .slider:before {
@@ -59,5 +60,5 @@ input:checked + .slider:before {
 }
 
 .emoji {
-  padding: 0.5em;
+  padding: 0.3em;
 }

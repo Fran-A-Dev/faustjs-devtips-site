@@ -3173,8 +3173,8 @@ export interface SubmitContactFormCFInput {
   email: Scalars["String"];
   /** Name of the contact */
   name: Scalars["String"];
-  /** Phone number of the contact */
-  phone?: Maybe<Scalars["String"]>;
+  /** topic user requests to learn */
+  topic?: Maybe<Scalars["String"]>;
 }
 
 /** Input for the UpdateCategory mutation */
@@ -6427,9 +6427,9 @@ export const generatedSchema = {
     previewRevisionId: { __type: "ID" },
     slug: { __type: "String" },
     status: { __type: "String" },
-    subject: { __type: "String" },
     template: { __type: "ContentTemplate" },
     templates: { __type: "[String]" },
+    topic: { __type: "String" },
     uri: { __type: "String" },
   },
   FormSubmissionToPreviewConnectionEdge: {
@@ -7361,7 +7361,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     email: { __type: "String!" },
     name: { __type: "String!" },
-    phone: { __type: "String" },
+    topic: { __type: "String" },
   },
   SubmitContactFormCFPayload: {
     __typename: { __type: "String!" },
@@ -7369,8 +7369,8 @@ export const generatedSchema = {
     email: { __type: "String" },
     errors: { __type: "[String]" },
     name: { __type: "String" },
-    phone: { __type: "String" },
     successMessage: { __type: "String" },
+    topic: { __type: "String" },
   },
   UpdateCategoryInput: {
     aliasOf: { __type: "String" },
@@ -13542,12 +13542,12 @@ export interface FormSubmission
    * The current status of the object
    */
   status?: Maybe<ScalarsEnums["String"]>;
-  subject?: Maybe<ScalarsEnums["String"]>;
   /**
    * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  topic?: Maybe<ScalarsEnums["String"]>;
   /**
    * The unique resource identifier path
    */
@@ -15025,13 +15025,13 @@ export interface SubmitContactFormCFPayload {
    */
   name?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Phone number of the contact
-   */
-  phone?: Maybe<ScalarsEnums["String"]>;
-  /**
    * Message returned when successful
    */
   successMessage?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * topic user request to learn
+   */
+  topic?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
