@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/lib/Layout";
 import styles from "../styles/pages/Termsubmit.module.scss";
 import { client } from "../client";
@@ -22,10 +22,10 @@ export default function Form() {
         input: args,
       });
 
-      console.log(name);
-      console.log(successMessage);
-
-      return successMessage;
+      return {
+        successMessage,
+        errors,
+      };
     }
   );
 
@@ -41,12 +41,27 @@ export default function Form() {
     }).catch(console.error);
   };
 
+  useEffect(() => {
+    console.log(data);
+
+    if (data?.errors?.length) {
+      // show error message
+      setMessage("There was an error in the form submission");
+      return;
+    }
+
+    setMessage(data?.successMessage);
+    setName("");
+    setTopic("");
+    setEmail("");
+  }, [data]);
+
   return (
     <>
       <Layout>
         <main className={`content content-index ${styles.contact}`}>
           <div className="wrap">
-            <h1>Submit a Term</h1>
+            <h1>Submit a Topic</h1>
             <div className="message">{message}</div>
             <form style={{ width: "300px" }}>
               <label htmlFor="name">Name</label>
