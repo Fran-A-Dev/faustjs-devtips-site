@@ -14,7 +14,7 @@ export default function PostsPage() {
       <h1>My Nerd Newbie Blogs</h1>
       <ul>
         {posts.map((post) => (
-          <li key={post.slug}>
+          <li className="list" key={post.slug}>
             <Link href={`/posts/${post.slug}`}>
               <a>{post.title()}</a>
             </Link>
@@ -31,6 +31,3 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     client,
   });
 }
-
-
-

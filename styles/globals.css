@@ -29,3 +29,8 @@ body {
 a {
   color: var(--color);
 }
+
+.list {
+  font-size: xx-large;
+  margin-bottom: 2rem;
+}
