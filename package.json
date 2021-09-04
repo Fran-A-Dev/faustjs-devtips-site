@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p 8080",
+    "wpe-build": "",
     "lint": "next lint",
     "generate": "gqty generate"
   },
