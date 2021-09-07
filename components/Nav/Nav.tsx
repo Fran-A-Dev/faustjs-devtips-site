@@ -16,7 +16,7 @@ const Nav = () => {
           <Link href="/termSubmit">
             <a className={styles.emojilink}>
               <Emoji
-                symbol="🚀 🧗🏾‍♂️ 🤓  ⚛️ 👾 ♾️"
+                symbol=" 🧗🏾‍♂️ 🤓  ⚛️ "
                 label="Want to learn a new term or read about a new topic? Submit it here!"
                 size="2.1rem"
               />
