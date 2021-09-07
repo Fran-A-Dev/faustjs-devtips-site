@@ -1,7 +1,7 @@
 .nav {
-  font-size: large;
+  font-size: 0.8em;
   color: var(--color);
-  padding: 2rem;
+  padding: 1.1rem;
 
   box-shadow: 1px 1px 5px 1px var(--shadow-color);
   transition: box-shadow var(--transition-s) linear,
@@ -50,4 +50,5 @@
 
 .Nav_link {
   text-decoration: none;
+  text-align: left;
 }
