@@ -6,16 +6,6 @@
   box-shadow: 1px 1px 5px 1px var(--shadow-color);
   transition: box-shadow var(--transition-s) linear,
     color var(--transition-s) linear;
-  a {
-    align-self: center;
-  }
-}
-
-.container {
-  margin: 0 auto;
-  display: flex;
-  max-width: var(--container-width);
-  text-align: left;
 }
 
 .toggle {
@@ -48,6 +38,7 @@
   margin-left: 2em;
   padding-bottom: 0.1rem 0rem;
   text-decoration: none;
+  text-align: left;
 }
 
 .Nav_link {

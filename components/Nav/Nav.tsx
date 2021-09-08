@@ -7,6 +7,7 @@ import styles from "./Nav.module.scss";
 const Nav = () => {
   return (
     <nav className={styles.nav}>
+      <div className={styles.navtext} />
       <div className={styles.container}>
         <Link href="/">
           <a className={styles.Nav_link}>Fran&apos;s Modern Dev Terms</a>
@@ -18,7 +19,7 @@ const Nav = () => {
               <Emoji
                 symbol=" 🧗🏾‍♂️ 🤓  ⚛️ "
                 label="Want to learn a new term or read about a new topic? Submit it here!"
-                size="2.1rem"
+                size="2.0rem"
               />
             </a>
           </Link>
