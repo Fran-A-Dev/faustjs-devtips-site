@@ -3,6 +3,7 @@
   --shadow-color: rgba(255, 255, 255, 0.747);
   --bg-color: black;
   --container-width: 680px;
+  --header-width: 1000px;
   --transition-s: 0.25s;
   --border-color: rgb(47, 51, 54);
 }

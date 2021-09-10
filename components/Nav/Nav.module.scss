@@ -6,19 +6,23 @@
   box-shadow: 1px 1px 5px 1px var(--shadow-color);
   transition: box-shadow var(--transition-s) linear,
     color var(--transition-s) linear;
-  a {
-    align-self: center;
-  }
 }
 
 .container {
   margin: 0 auto;
   display: flex;
-  max-width: var(--container-width);
+  align-items: center;
+  max-width: var(--header-width);
+}
+
+.headlessBloggin {
+  margin-right: 2rem;
+  margin-left: 2rem;
 }
 
 .toggle {
-  display: inline;
+  display: flex;
+  align-items: center;
   margin-left: auto;
 }
 
@@ -39,16 +43,17 @@
 
 .logo {
   flex: 2;
+  text-align: left;
 }
 
 .emojilink {
-  margin-right: 4rem;
-  margin-left: 2em;
+  // margin-right: 4rem;
+  // margin-left: 2em;
   padding-bottom: 0.1rem 0rem;
   text-decoration: none;
+  text-align: left;
 }
 
 .Nav_link {
   text-decoration: none;
-  text-align: left;
 }
