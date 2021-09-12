@@ -1,6 +1,7 @@
 import "../faust.config";
 import "normalize.css";
 import "../styles/globals.css";
+import "highlight.js/styles/a11y-dark.css";
 
 import type { AppProps /*, AppContext */ } from "next/app";
 import { HeadlessProvider } from "@faustjs/next";

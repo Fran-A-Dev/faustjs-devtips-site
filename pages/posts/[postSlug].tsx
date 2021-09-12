@@ -1,4 +1,6 @@
+import { useRef, useLayoutEffect } from "react";
 import { GetStaticPropsContext } from "next";
+import { useRouter } from "next/router";
 import { getNextStaticProps } from "@faustjs/next";
 import { client } from "../../client";
 import Layout from "../../components/lib/Layout";
