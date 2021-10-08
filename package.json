@@ -11,8 +11,9 @@
     "generate": "gqty generate"
   },
   "dependencies": {
-    "@faustjs/core": "^0.10.0",
-    "@faustjs/next": "^0.10.0",
+    "@faustjs/core": "^0.12.0",
+    "@faustjs/next": "^0.12.0",
+    "@faustjs/react": "0.12.0",
     "highlight.js": "^11.2.0",
     "next": "11.1.0",
     "normalize.css": "^8.0.1",
