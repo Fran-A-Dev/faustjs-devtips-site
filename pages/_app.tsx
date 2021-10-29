@@ -1,18 +1,19 @@
 import "../faust.config";
+import { FaustProvider } from "@faustjs/next";
 import "normalize.css";
 import "../styles/globals.css";
 import "highlight.js/styles/vs.css";
 
 import type { AppProps /*, AppContext */ } from "next/app";
-import { HeadlessProvider } from "@faustjs/next";
+
 import { client } from "../client";
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <HeadlessProvider client={client} pageProps={pageProps}>
-      <Component {...pageProps} />
-    </HeadlessProvider>
+    <>
+      <FaustProvider client={client} pageProps={pageProps}>
+        <Component {...pageProps} />
+      </FaustProvider>
+    </>
   );
 }
-
-export default MyApp;
