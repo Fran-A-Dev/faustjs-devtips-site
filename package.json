@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start  -p 8080",
-    "wpe-build": "next build",
+    "start": "next start",
+    "clean": "rimraf .next node_modules",
     "lint": "next lint",
-    "generate": "gqty generate"
+    "generate": "gqty generate",
+    "wpe-build": "next build"
   },
   "dependencies": {
     "@faustjs/core": "^0.12.4",
